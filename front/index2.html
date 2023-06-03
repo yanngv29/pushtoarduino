@@ -1,0 +1,320 @@
+<?php 
+$colors = array('#007AFF','#FF7000','#FF7000','#15E25F','#CFC700','#CFC700','#CF1100','#CF00BE','#F00');
+$color_pick = array_rand($colors);
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style type="text/css">
+    body{
+        background: #003B46;
+    }
+
+    .head{
+        display: flex;
+    }
+     .title{
+         font-family: 'Inter', sans-serif;
+         font-style: normal;
+         font-weight: 700;
+         font-size: 64px;
+         line-height: 77px;
+         text-align: right;
+         text-transform: uppercase;
+         margin-left: 20px;
+
+         color: #FFFFFF;
+     }
+
+.chat-wrapper {
+	font: bold 11px/normal 'Lucida Console', tahoma, verdana, arial, sans-serif;
+    background: #2FB0D4;
+    padding: 20px;
+    margin: 20px auto;
+    box-shadow: 2px 2px 2px 0px #00000017;
+    width: 80%;
+    height: 100%;
+    min-height: 40vh;
+
+    background: #07575B;
+    border-radius: 24px;
+
+}
+
+#message-box {
+    width: calc(100%-10px);
+    height: 150px;
+    background: #fff;
+    box-shadow: inset 0px 0px 2px #00000017;
+    overflow: auto;
+    padding: 10px;
+
+    background: #64989b; /*#07575B;*/
+    border-radius: 24px;
+    color:white;
+    padding: 20px;
+
+
+
+}
+.user-panel{
+    margin-top: 10px;
+    height: 100%;
+}
+input[type=text]{
+    border: none;
+    padding: 5px 5px;
+    box-shadow: 2px 2px 2px #0000001c;
+}
+textarea{
+    display: block;
+    margin: auto;
+    width: 80%;
+    border: none;
+    padding: 5px 5px;
+    box-shadow: 2px 2px 2px #0000001c;
+    max-width: 90%;
+    min-width: 60%;
+    height: 181px;
+
+    background: #66A5AD;
+    border-radius: 24px;
+    padding: 20px;
+}
+
+button#send-message {
+    border: none;
+    padding: 5px 15px;
+    background: #11e0fb;
+    box-shadow: 2px 2px 2px #0000001c;
+    margin: auto;
+    display:block;
+    margin-top: 10px;
+    width: 134.07px;
+    height: 29px;
+    min-width: 100px;
+    background: #690808;
+    border-radius: 8px;
+
+}
+    button#send-message span {
+        margin-left: 5px;
+        font-family: 'Inconsolata', sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 13px;
+    /* identical to box height */
+
+        letter-spacing: -0.02em;
+
+        color: #FFFFFF;
+    }
+
+#Answer{
+    width: 80%;
+    margin:auto;
+    bottom: 0px;
+    top: auto;
+    font: bold 12px/normal 'Lucida Console', tahoma, verdana, arial, sans-serif;
+
+    background: #C4DFE6;
+    border-radius: 24px;
+    padding: 10px;
+}
+
+#retour{
+    color:black;
+}
+
+.Title{
+    font-weight: bold;
+    color:white;
+    font-size: 16px;
+
+
+}
+#FIFO{
+    width: 170px;
+    height: 60px;
+    display:block;
+    font: bold 11px/normal 'Lucida Console', tahoma, verdana, arial, sans-serif;
+    margin:auto;
+    margin-right:5px;
+
+    background: #C4DFE6;
+    border-radius: 16px;
+
+}
+#titleFIFO{
+    position:relative;
+    align-items: center;
+    text-align: center;
+    font-size: 15px;
+    margin: 0;
+    padding-top: 5px;
+    color:black;
+}
+
+#positionFIFO{
+    position:relative;
+    align-items: center;
+    text-align: center;
+    font-size: 20px;
+    margin: 0;
+    padding-top: 10px;
+    color:black;
+}
+</style>
+</head>
+<body>
+<div class="head">
+    <span class="title">WEBLED</span>
+<div id="FIFO">
+
+    <p id="titleFIFO">File d'attente : </p>
+    <p id="positionFIFO"><span id="userpos">...</span>/<span id="totalpos">...</span></p>
+</div></div>
+
+
+<div class="chat-wrapper">
+
+
+<div class="user-panel">
+    <p class="Title">Envoyez votre code au serveur</p>
+<!--<input type="text" name="message" id="message" maxlength="10000" placeholder="Type your message here..." />-->
+    <textarea type="text" name="message" id="message" maxlength="10000" placeholder="Collez votre code ici..."
+              rows="30" cols="33"></textarea>
+    <button id="send-message"><img src="./Autre/button.png"><span>T&#xE9;l&#xE9;verser</span></button>
+</div>
+</div>
+<div id="Answer" >
+    <span id="retour" class="Title">Retour du serveur</span>
+
+<div id="message-box"></div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script language="javascript" type="text/javascript">  
+	// //create a new WebSocket object.
+    // console.log('try to connect to websocket on ' + window.location.host);
+	// var msgBox = $('#message-box');
+	// var wsUri = "ws://"+window.location.host+"/WEBLED/"; 	
+	// websocket = new WebSocket(wsUri); 
+	
+	// websocket.onopen = function(ev) { // connection is open 
+	// 	msgBox.append('<div class="system_msg" style="color:#000000">Bienvenue</div>'); //notify user
+    //     console.log("coucou : " + window.location.host);
+	// }
+	// // Message received from server
+	// websocket.onmessage = function(ev) {
+		
+	// 	var response 		= JSON.parse(ev.data); //PHP sends Json data
+		
+	// 	var res_type 		= response.type; //message type
+	// 	var user_message 	= response.message; //message text
+    //     var user_pos 	    = response.pos;
+	// 	//var user_id 		= response.id; //user id
+
+	// 	switch(res_type){
+	// 		case 'msg':
+    //             var color = "A40000";
+    //             if(user_message==1) {
+    //                 user_message = "Votre code a bien &#xE9;t&#xE9; t&#xE9;l&#xE9;vers&#xE9;, il est en fil d'attente. Merci de Patienter...";
+    //                 color = "057300";
+
+    //                 document.getElementById('userpos').innerHTML=user_pos.toString();
+    //                 document.getElementById('totalpos').innerHTML=user_pos.toString();
+    //                 //document.getElementById("FIFO")
+    //             }
+	// 			msgBox.append('<div style="color:#'+color+'">' + user_message + '</div>');
+	// 			break;
+	// 		case 'system':
+	// 			msgBox.append('<div style="color:#bbbbbb">' + user_message + '</div>');
+	// 			break;
+    //         case 'systemBroadcast':
+    //             console.log(user_message);
+    //             if(user_message=="Next") {
+    //                 if(parseInt(document.getElementById('userpos').innerHTML)>0)
+    //                     document.getElementById('userpos').innerHTML = (parseInt(document.getElementById('userpos').innerHTML) - 1).toString();
+
+    //                 if(parseInt(document.getElementById('totalpos').innerHTML)>0)
+    //                     document.getElementById('totalpos').innerHTML = (parseInt(document.getElementById('totalpos').innerHTML) - 1).toString();
+    //             }
+    //             if(user_message=="Add") {
+    //                 document.getElementById('totalpos').innerHTML = (parseInt(document.getElementById('totalpos').innerHTML) + 1).toString();
+    //             }
+
+    //             break;
+	// 	}
+	// 	msgBox[0].scrollTop = msgBox[0].scrollHeight; //scroll message 
+	// console.log(ev.data);
+	// };
+	
+	// websocket.onerror	= function(ev){ msgBox.append('<div class="system_error">Error Occurred - ' + ev.data + '</div>'); }; 
+	// websocket.onclose 	= function(ev){ msgBox.append('<div class="system_msg">Connection Closed</div>'); }; 
+
+	//Message send button
+	$('#send-message').click(function(){
+		send_message();
+	});
+	
+	//User hits enter key 
+	/*$( "#message" ).on( "keydown", function( event ) {
+	  if(event.which==13){
+		  send_message();
+	  }
+	});*/
+	
+    function send_message() {
+        var message_input = $('#message'); //user message text
+
+	 	if(message_input.val() == ""){ //emtpy message?
+	 		alert("Enter Some message Please!");
+	 		return;
+	 	}
+        if(parseInt(document.getElementById('userpos').innerHTML)>0){
+             alert("Vous avez déjà un code en attente d'éxécution. Merci de Patienter.");
+	 		return;
+         }
+
+	 	//prepare json data
+	 	var msg = {
+	 		message: message_input.val(),
+	 		id: 10,
+	 	};
+
+        $.getJSON('http://'+window.location.host+"/televerse",JSON.stringify(msg))
+    }
+	//Send message
+	// function send_message(){
+	// 	var message_input = $('#message'); //user message text
+
+	// 	if(message_input.val() == ""){ //emtpy message?
+	// 		alert("Enter Some message Please!");
+	// 		return;
+	// 	}
+
+    //     if(parseInt(document.getElementById('userpos').innerHTML)>0){
+    //         alert("Vous avez déjà un code en attente d'éxécution. Merci de Patienter.");
+	// 		return;
+    //     }
+
+	// 	//prepare json data
+	// 	var msg = {
+	// 		message: message_input.val(),
+	// 		id: 10,
+	// 	};
+
+    //     console.log("msg: "+message_input.val()+" : Taille envoyée: "+message_input.val().length);
+	// 	//convert and send data to server
+	// 	websocket.send(JSON.stringify(msg));	
+	// 	//message_input.val(''); //reset message input*/
+	// 	/*websocket.send("code;;;");
+	// 	console.log("Wait from the server");*/
+	// }
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "srvygu",
+  "version": "1.0.0",
+  "description": "simple server http to televerse arduino code to local board",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ygu",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.13.0"
+  }
+}
