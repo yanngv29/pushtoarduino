@@ -128,14 +128,20 @@ button#send-message {
 #retour{
     color:black;
 }
-
-.Title{
+.titleId {
+    display: inline-grid;
+    .Title{
     font-weight: bold;
     color:white;
     font-size: 16px;
-
-
+    }
+    .identifiant{
+        color:white;
+        font-size: 14px;
+        display: contents;
+    }
 }
+ 
 #FIFO{
     width: 170px;
     height: 60px;
@@ -167,17 +173,57 @@ button#send-message {
     padding-top: 10px;
     color:black;
 }
+
+#FIFOComp{
+    width: 170px;
+    height: 60px;
+    display:block;
+    font: bold 11px/normal 'Lucida Console', tahoma, verdana, arial, sans-serif;
+    margin:auto;
+    margin-right:5px;
+
+    background: #C4DFE6;
+    border-radius: 16px;
+
+}
+#titleFIFOComp{
+    position:relative;
+    align-items: center;
+    text-align: center;
+    font-size: 15px;
+    margin: 0;
+    padding-top: 5px;
+    color:black;
+}
+
+#positionFIFOComp{
+    position:relative;
+    align-items: center;
+    text-align: center;
+    font-size: 20px;
+    margin: 0;
+    padding-top: 10px;
+    color:black;
+}
+
 </style>
 </head>
 <body>
 <div class="head">
-    <span class="title">WEBLED</span>
-<div id="FIFO">
+    <div class="titleId">
+        <span class="title">MUR DE LEDS </span> 
+        <span class="identifiant"> Identifiant : </span> 
+        <span class="identifiant" id="userId"></span>
+    </div>
 
+<div id="FIFOComp">
+    <p id="titleFIFOComp">File compilation : </p>
+    <p id="positionFIFOComp"><span id="userposcomp">...</span>/<span id="totalposcomp">...</span></p>
+</div></div>
+<div id="FIFO">
     <p id="titleFIFO">File d'attente : </p>
     <p id="positionFIFO"><span id="userpos">...</span>/<span id="totalpos">...</span></p>
 </div></div>
-
 
 <div class="chat-wrapper">
 
@@ -216,18 +262,22 @@ button#send-message {
 		var res_type 		= response.type; //message type
 		var user_message 	= response.message; //message text
         var user_pos 	    = response.pos;
+        var initUser        = response.init;
 		//var user_id 		= response.id; //user id
 
 		switch(res_type){
 			case 'msg':
                 var color = "A40000";
-                if(user_message==1) {
-                    user_message = "Votre code a bien &#xE9;t&#xE9; t&#xE9;l&#xE9;vers&#xE9;, il est en fil d'attente. Merci de Patienter...";
+                if(initUser != undefined) {
+                    //user_message = "Votre code a bien &#xE9;t&#xE9; t&#xE9;l&#xE9;vers&#xE9;, il est en fil d'attente. Merci de Patienter...";
                     color = "057300";
-
-                    document.getElementById('userpos').innerHTML=user_pos.toString();
-                    document.getElementById('totalpos').innerHTML=user_pos.toString();
-                    //document.getElementById("FIFO")
+                    if (initUser == "compile") {
+                      document.getElementById('userposcomp').innerHTML=user_pos.toString();
+                      document.getElementById('totalposcomp').innerHTML=user_pos.toString();
+                    } else {
+                      document.getElementById('userpos').innerHTML=user_pos.toString();
+                      document.getElementById('totalpos').innerHTML=user_pos.toString();
+                    }
                 }
 				msgBox.append('<div style="color:#'+color+'">' + user_message + '</div>');
 				break;
@@ -236,6 +286,7 @@ button#send-message {
                     msgBox.append('<div style="color:#bbbbbb">' + user_message + '</div>');
                 } else {
                     userId = response.id;
+                    document.getElementById('userId').innerHTML = userId;
                 }
 				break;
             case 'systemBroadcast':
@@ -250,7 +301,16 @@ button#send-message {
                 if(user_message=="Add") {
                     document.getElementById('totalpos').innerHTML = (parseInt(document.getElementById('totalpos').innerHTML) + 1).toString();
                 }
+                if(user_message=="NextComp") {
+                    if(parseInt(document.getElementById('userposcomp').innerHTML)>0)
+                        document.getElementById('userposcomp').innerHTML = (parseInt(document.getElementById('userposcomp').innerHTML) - 1).toString();
 
+                    if(parseInt(document.getElementById('totalposcomp').innerHTML)>0)
+                        document.getElementById('totalposcomp').innerHTML = (parseInt(document.getElementById('totalposcomp').innerHTML) - 1).toString();
+                }
+                if(user_message=="AddComp") {
+                    document.getElementById('totalposcomp').innerHTML = (parseInt(document.getElementById('totalposcomp').innerHTML) + 1).toString();
+                }
                 break;
 		}
 		msgBox[0].scrollTop = msgBox[0].scrollHeight; //scroll message 
