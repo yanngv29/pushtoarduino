@@ -96,8 +96,8 @@ wss.on('connection', (ws,req) => {
     //send immediatly a feedback to the incoming connection   
     ws.send(JSON.stringify({type: 'system',id: clientId, })); 
     ws.send(JSON.stringify({type: 'system',message: `Bonjour ${ip}, `}));
-    ws.send(JSON.stringify({type: 'system',message: `je suis le serveur du mur de leds`}));
-    ws.send(JSON.stringify({type: 'system',message: `tu est le client N° ${clientId}`}));
+    ws.send(JSON.stringify({type: 'system',message: `Je suis le serveur du mur de leds`}));
+    ws.send(JSON.stringify({type: 'system',message: `Tu es le client N° ${clientId}`}));
 });
 
 
