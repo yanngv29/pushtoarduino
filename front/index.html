@@ -290,20 +290,23 @@ button#send-message {
 
                     if(parseInt(document.getElementById('totalpos').innerHTML)>0)
                         document.getElementById('totalpos').innerHTML = (parseInt(document.getElementById('totalpos').innerHTML) - 1).toString();
-                }
+                } else
                 if(user_message=="Add") {
                     document.getElementById('totalpos').innerHTML = (parseInt(document.getElementById('totalpos').innerHTML) + 1).toString();
-                }
+                } else
                 if(user_message=="NextComp") {
                     if(parseInt(document.getElementById('userposcomp').innerHTML)>0)
                         document.getElementById('userposcomp').innerHTML = (parseInt(document.getElementById('userposcomp').innerHTML) - 1).toString();
 
                     if(parseInt(document.getElementById('totalposcomp').innerHTML)>0)
                         document.getElementById('totalposcomp').innerHTML = (parseInt(document.getElementById('totalposcomp').innerHTML) - 1).toString();
-                }
+                } else
                 if(user_message=="AddComp") {
                     document.getElementById('totalposcomp').innerHTML = (parseInt(document.getElementById('totalposcomp').innerHTML) + 1).toString();
+                } else {
+                    msgBox.append('<div style="color:#bbbbbb">' + user_message + '</div>');
                 }
+                
                 break;
 		}
 		msgBox[0].scrollTop = msgBox[0].scrollHeight; //scroll message 

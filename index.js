@@ -162,7 +162,7 @@ setInterval(() => {
                                 setTimeout(() => {
                                     broadcast("Fin de l'éxecution du programme du client "+ data.id );
                                     televersementEnCours = false
-                                }, 30000);
+                                }, 60000);
                             }
                             
                            
