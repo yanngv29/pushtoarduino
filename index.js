@@ -136,7 +136,7 @@ setInterval(() => {
                     if (err) {
                         console.log('Oupppppsss pb : ' +err);    
                     } else {
-                        console.log('It\'s saved!');
+                        //console.log('It\'s saved!');
                       //  console.log('arduino-cli compile -p '.$portboard.' --fqbn '.$board.' txt --format json --upload');
                         const televerseProcess = spawn( 'arduino-cli', [ 'compile', '-p',portboard , '--fqbn' ,board ,'codeTemp', '--format', 'json', '--upload' ] );
                         
