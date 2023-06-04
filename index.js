@@ -36,8 +36,8 @@ if ( tmpJson.length >= 1) {
     var index =0;
     while(board == undefined && index < tmpJson.length) {
         if (tmpJson[index].matching_boards != undefined && tmpJson[index].port != undefined) {
-            board = tmpJson[0].matching_boards[0].fqbn;
-            portboard = tmpJson[0].port.address;
+            board = tmpJson[index].matching_boards[0].fqbn;
+            portboard = tmpJson[index].port.address;
             console.log('Found a '+board+ ' on port ' + portboard)
         } 
         index++;
@@ -90,7 +90,7 @@ wss.on('connection', (ws,req) => {
         //var response = { type: 'msg', id:userId, message: 'votre commande a été ajouté dans file de compilation, vous êtes N° '+ num}; 
         //ws.send(JSON.stringify(response));
         sendMessageInitCompile(userId, 'votre commande a été ajouté dans file de COMPILATION, vous êtes N° '+ num,num)
-        AjoutDansCompileFifoFait();
+        AjoutDansCompileFifoFait(userId);
     });
     
     //send immediatly a feedback to the incoming connection   
@@ -100,16 +100,18 @@ wss.on('connection', (ws,req) => {
     ws.send(JSON.stringify({type: 'system',message: `tu est le client N° ${clientId}`}));
 });
 
+
+//ATTENTION cette partie a été mise en commentaire car ça ne fonctionne pas sur le PC de l'ENSIM.(pb d'encodage qui fait planter le ping.)
 // pour vérifier qu'on a bien des sockets vivantes mais pas certain que ça fonctionne activement ... 
-setInterval(() => {
-    wss.clients.forEach((ws) => {
-        //console.log('ping client !')
-        if (!ws.isAlive) return ws.terminate();
+// setInterval(() => {
+//     wss.clients.forEach((ws) => {
+//         //console.log('ping client !')
+//         if (!ws.isAlive) return ws.terminate();
         
-        ws.isAlive = false;
-        ws.ping(null, false, true);
-    });
-}, 10000);
+//         ws.isAlive = false;
+//         ws.ping(null, false, true);
+//     });
+// }, 10000);
 
 
 // ici c'est le code qui regarde toutes les secondes si il peut téléverser QQ chose .
@@ -156,8 +158,9 @@ setInterval(() => {
                                 televersementEnCours = false
                             } else {
                                 sendSuccessTeleverse(data.id)
-                                broadcast("Execution du programme du client "+ data.id);
+                                broadcast("Execution du programme du client "+ data.id + " pendant 30 secondes minimum");
                                 setTimeout(() => {
+                                    broadcast("Fin de l'éxecution du programme du client "+ data.id );
                                     televersementEnCours = false
                                 }, 30000);
                             }
@@ -234,7 +237,7 @@ setInterval(() => {
                                 //var response = { type: 'msg', id:userId, message: 'votre commande a été ajouté dans file de téléversement, vous êtes N° '+ num}; 
                                 //ws.send(JSON.stringify(response));
                                 sendMessageInitTeleverse(data.id, 'votre commande a été ajouté dans file de TELEVERSEMENT, vous êtes N° '+ num,num)
-                                AjoutDansFifoFait()
+                                AjoutDansFifoFait(data.id)
                             }
                             shiftDansFifoFait()
                             compilationEnCours = false
@@ -363,9 +366,19 @@ function broadcast(msg) {
     });
 }
 
-function AjoutDansFifoFait(){
+function broadcastAllBut(id,msg) {
+    var notToBroadCastClient =findClient(id);
+    wss.clients
+    .forEach(client => {
+            if ( client != notToBroadCastClient.ws) {
+                client.send(JSON.stringify({type: 'systemBroadcast', message: msg}));
+            }
+    });
+}
+
+function AjoutDansFifoFait(id){
     //Broadcast
-    broadcast("Add");
+    broadcastAllBut(id,"Add");
 }
 	
 function shiftDansFifoFait(){
@@ -373,9 +386,9 @@ function shiftDansFifoFait(){
 	broadcast("Next");
 }
 
-function AjoutDansCompileFifoFait(){
+function AjoutDansCompileFifoFait(id){
     //Broadcast
-    broadcast("AddComp");
+    broadcastAllBut(id,"AddComp");
 }
 	
 function shiftDansCompileFifoFait(){
