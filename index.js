@@ -32,10 +32,22 @@ if ( initProcess.stderr != undefined && initProcess.stderr.toString().length > 0
 
 console.log("RETOUR OUT : "+ initProcess.stdout)
 var tmpJson = JSON.parse(initProcess.stdout.toString());
-if ( tmpJson.length > 1) {
-    board = tmpJson[1].matching_boards[0].fqbn;
-    portboard = tmpJson[1].port.address;
-    console.log('Found a '+board+ ' on port ' + portboard)
+if ( tmpJson.length >= 1) {
+    var index =0;
+    while(board == undefined && index < tmpJson.length) {
+        if (tmpJson[index].matching_boards != undefined && tmpJson[index].port != undefined) {
+            board = tmpJson[0].matching_boards[0].fqbn;
+            portboard = tmpJson[0].port.address;
+            console.log('Found a '+board+ ' on port ' + portboard)
+        } 
+        index++;
+    }
+
+    if ( board == undefined) {
+      console.log('board not found. i dont understand JSON info . plug the board and restart ');
+      exit(2);
+    }
+
 } else {
     console.log('board not found. plug the board and restart ');
     exit(2);
@@ -56,7 +68,7 @@ wss.on('connection', (ws,req) => {
    
     var clientId = nbClient++;
     clients.push({id: clientId, ws: ws});
-
+    
     ws.isAlive = true;
 
     ws.on('pong', () => {

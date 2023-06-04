@@ -128,19 +128,14 @@ button#send-message {
 #retour{
     color:black;
 }
-.titleId {
-    display: inline-grid;
+
     .Title{
     font-weight: bold;
     color:white;
     font-size: 16px;
     }
-    .identifiant{
-        color:white;
-        font-size: 14px;
-        display: contents;
-    }
-}
+
+
  
 #FIFO{
     width: 170px;
@@ -210,11 +205,9 @@ button#send-message {
 </head>
 <body>
 <div class="head">
-    <div class="titleId">
-        <span class="title">MUR DE LEDS </span> 
-        <span class="identifiant"> Identifiant : </span> 
-        <span class="identifiant" id="userId"></span>
-    </div>
+
+  <span class="title" id="titleId">MUR DE LEDS </span> 
+
 
 <div id="FIFOComp">
     <p id="titleFIFOComp">File compilation : </p>
@@ -286,7 +279,7 @@ button#send-message {
                     msgBox.append('<div style="color:#bbbbbb">' + user_message + '</div>');
                 } else {
                     userId = response.id;
-                    document.getElementById('userId').innerHTML = userId;
+                    document.getElementById('titleId').innerHTML = "MUR DE LEDS #"+userId;
                 }
 				break;
             case 'systemBroadcast':
